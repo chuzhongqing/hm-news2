@@ -1,3 +1,12 @@
 <template>
-  <h1>我是根组件</h1>
+  <div>
+    <!-- 配置路由出口 -->
+    <router-view></router-view>
+  </div>
 </template>
+
+<script>
+export default {};
+</script>
+
+<style></style>
