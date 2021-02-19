@@ -8,7 +8,8 @@ const router = new VueRouter({
   //配置路由规则
   routes: [
     { path: "/", component: Login },
-    { path: "/login", component: Login },
+    // 命名路由 给路由一个name
+    { path: "/login", name: "login", component: Login },
     { path: "/register", component: Register },
     { path: "/user", component: User },
   ],

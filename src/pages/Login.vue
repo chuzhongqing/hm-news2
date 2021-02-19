@@ -29,6 +29,9 @@
     ></hm-input>
     <!-- 昵称 -->
     <hm-button @click="login">登录</hm-button>
+    <div class="go-register">
+      没有账号？<router-link class="link" to="/register">去注册</router-link>
+    </div>
   </div>
 </template>
 
@@ -81,7 +84,21 @@ export default {
       password: "",
     };
   },
+  created() {
+    // console.log(this.$route);
+    this.username = this.$route.params.username;
+    this.password = this.$route.params.password;
+  },
 };
 </script>
 
-<style></style>
+<style scoped lang="less">
+.go-register {
+  padding: 0 20px;
+  font-size: 18px;
+  text-align: center;
+  .link {
+    color: orange;
+  }
+}
+</style>
