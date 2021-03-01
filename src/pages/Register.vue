@@ -44,14 +44,14 @@ export default {
   },
   methods: {
     //用户注册
-    register() {
+    async register() {
       //表单校验
       let status1 = this.$refs.username.valiDate(this.username);
       let status2 = this.$refs.nickname.valiDate(this.nickname);
       let status3 = this.$refs.password.valiDate(this.password);
       //校验全部通过后发送ajax请求
       if (status1 && status2 && status3) {
-        this.$axios({
+        const res = await this.$axios({
           url: "/register",
           method: "post",
           data: {
@@ -59,25 +59,24 @@ export default {
             nickname: this.nickname,
             password: this.password,
           },
-        }).then((res) => {
-          //注册后的提示
-          if (res.data.statusCode === 200) {
-            this.$toast.success(res.data.message);
-            //登录成功后跳转到登录页 并且传递参数 使用params来传递参数时必须使用命名路由 这是使用query传递参数会暴露在地址栏
-            //在目标页使用this.$route.parmas来获取数据
-            //<router-link to='/login'>和<router-link name='login'> 是一样的 但是使用name时路由要是命名路由
-            this.$router.push({
-              name: "login",
-              params: {
-                username: this.username,
-                password: this.password,
-              },
-            });
-          } else {
-            this.$toast.fail(res.data.message);
-          }
-          console.log(res);
         });
+        //注册后的提示
+        if (res.data.statusCode === 200) {
+          this.$toast.success(res.data.message);
+          //登录成功后跳转到登录页 并且传递参数 使用params来传递参数时必须使用命名路由 这是使用query传递参数会暴露在地址栏
+          //在目标页使用this.$route.parmas来获取数据
+          //<router-link to='/login'>和<router-link name='login'> 是一样的 但是使用name时路由要是命名路由
+          this.$router.push({
+            name: "login",
+            params: {
+              username: this.username,
+              password: this.password,
+            },
+          });
+        } else {
+          this.$toast.fail(res.data.message);
+        }
+        console.log(res);
       } else {
         return;
       }

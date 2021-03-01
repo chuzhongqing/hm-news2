@@ -39,12 +39,12 @@
 export default {
   methods: {
     //发送登录请求
-    login() {
+    async login() {
       //因为使用了ref所以可以用refs访问到子组件上的方法和数据 进行表单校验
       this.$refs.username.valiDate(this.username);
       this.$refs.password.valiDate(this.password);
-      console.log(this.$refs.username);
-      console.log(this.$refs.password);
+      // console.log(this.$refs.username);
+      // console.log(this.$refs.password);
       if (this.$refs.username.valiDate(this.username) === false) {
         console.log("账号校验错误");
         return;
@@ -54,25 +54,28 @@ export default {
         return;
       }
       //因为把axios绑定到vue的原型上了所以可以直接用this.$axios发送请求
-      this.$axios({
+      const res = await this.$axios({
         method: "post",
         url: "/login",
         data: {
           username: this.username,
           password: this.password,
         },
-      }).then((res) => {
-        //登录成功后跳转到user页
-        if (res.status === 200) {
-          console.log("请求成功");
-          if (res.data.statusCode === 200) {
-            this.$toast.success("成功文案");
-            this.$router.push("/user");
-          } else {
-            this.$toast.fail("失败文案");
-          }
-        }
       });
+      //登录成功后跳转到user页
+      const { statusCode, message, data } = res.data;
+      if (res.status === 200) {
+        if (statusCode === 200) {
+          console.log(data.token);
+          // 把登录后的token和用户id存储起来
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user_id", data.user.id);
+          this.$toast.success(message);
+          this.$router.push("/user");
+        } else {
+          this.$toast.fail(message);
+        }
+      }
     },
     // inputFn(e) {
     //   this.msg = e;
